@@ -1,3 +1,4 @@
+
 #
 # Cookbook:: tomcat
 # Recipe:: default
@@ -94,10 +95,11 @@ execute 'chown -R chef webapps/ work/ temp/ logs/ conf/' do
 	cwd 'opt/tomcat'
 end
 
+
 #Setup Guard statement to test tomcat-users.xml to allow for admin user access to admn roles in GUI
 template '/opt/tomcat/conf/tomcat-users.xml' do
 	source 'tomcat-users.xml.erb'	
-	not_if 'grep "###-chef-auto-install-###" /opt/tomcat/conf/tomcat-users.xml'
+	not_if 'grep "rolename="tomcat" /opt/tomcat/conf/tomcat-users.xml'
 end
 
 
