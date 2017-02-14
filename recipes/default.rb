@@ -94,3 +94,33 @@ execute 'chown -R chef webapps/ work/ temp/ logs/ conf/' do
 	cwd 'opt/tomcat'
 end
 
+#Setup Guard statement to test tomcat-users.xml to allow for admin user access to admn roles in GUI
+template '/opt/tomcat/conf/tomcat-users.xml' do
+	source 'tomcat-users.xml.erb'	
+	not_if 'grep "###-chef-auto-install-###" /opt/tomcat/conf/tomcat-users.xml'
+end
+
+
+
+#Setup Tomcat Service
+# Get Service file template from Chef template repository
+template 'etc/systemd/system/tomcat.service' do
+	source 'tomcat.service.erb'
+end
+
+
+# reload deamons
+execute 'systemctl daemon-reload'
+
+# add tomcat service
+service 'tomcat' do
+	action [:start, :enable]
+end
+
+
+
+
+
+
+
+
